@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "GIML (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "GIML (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

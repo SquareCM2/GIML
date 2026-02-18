@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="GIML.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GIML"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Spacing="12" Margin="20">
+        <TextBlock Text="设置" Style="{StaticResource TitleTextBlockStyle}"/>
+        <TextBlock Text="启动"/>
+        <TextBlock Text="存放游戏 jar 文件的文件夹（启动器将在其中创建实例）"/>
+
+        <Grid ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="FolderPathBox" PlaceholderText="未选择文件夹" IsReadOnly="True"/>
+            <Button Grid.Column="1" Content="浏览..." Click="BrowseFolder_Click"/>
+        </Grid>
+
+        <TextBlock Text="所使用的java"/>
+
+        <Grid ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="JavaPathBox" PlaceholderText="未选择文件" IsReadOnly="True"/>
+            <Button Grid.Column="1" Content="浏览..." Click="BrowseJava_Click"/>
+        </Grid>
+    </StackPanel>
+</Page>

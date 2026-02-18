@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+    
+<Page
+    x:Class="GIML.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GIML"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <local:NullToBoolConverter x:Key="NullToBoolConverter"/>
+        <!-- 实例卡片模板 -->
+        <DataTemplate x:Key="InstanceTemplate" x:DataType="local:GameInstance">
+            <Grid Width="200" Height="200" Margin="10" Background="{ThemeResource CardBackgroundFillColorDefault}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Image Source="{x:Bind IconPath}" Width="100" Height="100" Grid.Row="0"/>
+                <TextBlock Text="{x:Bind Name}" HorizontalAlignment="Center" Grid.Row="1"/>
+            </Grid>
+        </DataTemplate>
+
+        <!-- 添加占位符模板 -->
+        <DataTemplate x:Key="AddTemplate" x:DataType="local:AddInstancePlaceholder">
+            <Grid Width="200" Height="200" Margin="10" Background="{ThemeResource CardBackgroundFillColorSecondary}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <SymbolIcon Symbol="Add" Width="50" Height="50"/>
+                    <TextBlock Text="添加新实例" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <!-- 模板选择器 -->
+        <local:GameItemTemplateSelector x:Key="TemplateSelector"
+                                    InstanceTemplate="{StaticResource InstanceTemplate}"
+                                    AddTemplate="{StaticResource AddTemplate}"/>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <GridView ItemsSource="{x:Bind GameItems, Mode=OneWay}"
+          SelectionMode="Single"
+          SelectedItem="{x:Bind SelectedObject, Mode=TwoWay}"
+          SelectionChanged="GridView_SelectionChanged">
+                <GridView.ItemTemplateSelector>
+                    <local:GameItemTemplateSelector InstanceTemplate="{StaticResource InstanceTemplate}"
+                                        AddTemplate="{StaticResource AddTemplate}"/>
+                </GridView.ItemTemplateSelector>
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid MaximumRowsOrColumns="3" Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+            </GridView>
+        </Grid>
+
+        <Border Grid.Row="1" 
+            BorderThickness="0,1,0,0"
+            BorderBrush="Gray"
+            Padding="0"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="LaunchClient" 
+                Content="启动游戏" 
+                Width="100" Height="40"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center"
+                Grid.Column="0"
+                IsEnabled="{x:Bind SelectedInstance, Mode=OneWay, Converter={StaticResource NullToBoolConverter}}"
+                Click="LaunchButton_Click"
+                Margin="5"
+                />
+        </Grid>
+    </Grid>
+</Page>
