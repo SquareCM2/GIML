@@ -6,7 +6,25 @@
     xmlns:local="using:GIML"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+        <ContentDialog x:Name="DownloadingDialog"
+            CloseButtonText="取消"
+            Title="正在下载">
+            <StackPanel>
+                <TextBlock Text="正在下载您所选的游戏实例。坐和放宽..." />
+                <ProgressBar x:Name="DownloadProgressBar" 
+                         IsIndeterminate="False" 
+                         Minimum="0" Maximum="100" 
+                         Width="300" Margin="12"/>
+            </StackPanel>
+        </ContentDialog>
+
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -29,7 +47,7 @@
                 </StackPanel>
             </Button>
             <TextBlock Text="创建新实例" Grid.Column="1" VerticalAlignment="Center" Foreground="Gray"/>
-            
+
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -39,29 +57,101 @@
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="28"/>
+                    <RowDefinition Height="20"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Canvas Grid.Row="0">
                     <StackPanel Orientation="Horizontal" Spacing="8" Canvas.Left="20">
                         <TextBlock Text="筛选：" VerticalAlignment="Center"/>
-                        <ComboBox SelectionChanged="FliterBox_SelectionChanged" SelectedIndex="0" Width="350">
-                            <x:String>原版（Mindustry）</x:String>
-                            <x:String>BE（Mindustry-BuildEdge）</x:String>
-                            <x:String>学术端（Mindustry-CN-ARC）</x:String>
-                            <x:String>X端（MindustryX）</x:String>
+                        <ComboBox x:Name="ReleasesFliter" SelectionChanged="FliterBox_SelectionChanged" SelectedIndex="0" Width="342">
+                            <ComboBoxItem Content="原版（Mindustry）" Tag="vanilla"/>
+                            <ComboBoxItem Content="前沿构建（Mindustry-BE）" Tag="be"/>
+                            <ComboBoxItem Content="学术端（Mindustry-CN-ARC）" Tag="arc"/>
+                            <ComboBoxItem Content="X端（MindustryX）" Tag="x"/>
                         </ComboBox>
                     </StackPanel>
                 </Canvas>
-                <GridView Grid.Row="1">
+
+
+
+                <Grid Background="#80000000" 
+                    Visibility="{x:Bind IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Grid.Row="2">
+                    <ProgressRing x:Name="LoadingRing" 
+                      IsActive="{x:Bind IsLoading, Mode=OneWay}" 
+                      Visibility="{x:Bind IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" 
+                      HorizontalAlignment="Center" 
+                      VerticalAlignment="Center"
+                      Width="50" Height="50"/>
+                </Grid>
+
+                <GridView Grid.Row="2"
+                          x:Name="ReleasesGridView"
+                          SelectionMode="Single"
+                          SelectedItem="{x:Bind SelectedRelease, Mode=TwoWay}"
+                          SelectionChanged="ReleaseSelectionChanged"
+                          Margin="20, 0">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="local:AvailableInstance">
+                            <Border Background="{ThemeResource CardBackgroundFillColorDefault}"
+                                    Width="450" Height="100" CornerRadius="8">
+                                <StackPanel Margin="12" Spacing="4">
+                                    <TextBlock Text="{x:Bind Name}"
+                                               FontSize="18"/>
+                                    <TextBlock Text="{x:Bind TagName}" Foreground="Gray" FontSize="12"/>
+                                    <TextBlock Text="{x:Bind PublishedAt}"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
 
                 </GridView>
             </Grid>
-            
-            <Border Grid.Column="1" 
-                BorderThickness="1,0,0,0"
+
+            <Border Grid.Column="0" 
+                BorderThickness="0,0,1,0"
                 BorderBrush="Gray"
                 Padding="0"/>
-            
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="90"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="145"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Padding="15, 0, 15, 15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="InstanceName" Text="" Style="{StaticResource TitleTextBlockStyle}"  VerticalAlignment="Top"/>
+                    <TextBlock x:Name="InstanceTime" Text="" VerticalAlignment="Top" Foreground="Gray" Grid.Row="2"/>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="10">
+                        <TextBlock x:Name="InstanceType" Text="" VerticalAlignment="Top" Foreground="Gray"/>
+                        <TextBlock x:Name="InstanceVersion" Text="" VerticalAlignment="Top" Foreground="Gray"/>
+                    </StackPanel>
+                </Grid>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+                    <toolkit:MarkdownTextBlock x:Name="Desc_MarkdownBlock" Padding="20" ImageMaxHeight="400"/>
+                </ScrollViewer>
+
+                <Grid Grid.Row="2" Padding="15, 15, 15, 15" RowSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBox Header="实例名称" x:Name="InstancePathName"/>
+                    <Button x:Name="InstanceDownloadButton" Grid.Row="1" VerticalAlignment="Bottom" Height="40" HorizontalAlignment="Center" Width="270" IsEnabled="False" Click="DownloadButton_Click">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <SymbolIcon Symbol="Download"/>
+                            <TextBlock Text="下载" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Grid>
+
         </Grid>
     </Grid>
 </Page>

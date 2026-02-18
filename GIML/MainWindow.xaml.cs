@@ -73,6 +73,10 @@ namespace GIML
 
             // 同时可以默认导航到主页（可选）
             ContentFrame.Navigate(typeof(HomePage));
+
+            // 设置标题栏主题为“跟随应用模式”
+            // 这会使标题栏自动匹配系统的深色/浅色主题
+            appWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
         }
 
         private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)

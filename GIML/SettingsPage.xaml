@@ -10,7 +10,7 @@
 
     <StackPanel Spacing="12" Margin="20">
         <TextBlock Text="设置" Style="{StaticResource TitleTextBlockStyle}"/>
-        <TextBlock Text="启动"/>
+        <TextBlock Text="启动" Style="{StaticResource SubtitleTextBlockStyle}"/>
         <TextBlock Text="存放游戏 jar 文件的文件夹（启动器将在其中创建实例）"/>
 
         <Grid ColumnSpacing="8">
@@ -31,6 +31,12 @@
             </Grid.ColumnDefinitions>
             <TextBox x:Name="JavaPathBox" PlaceholderText="未选择文件" IsReadOnly="True"/>
             <Button Grid.Column="1" Content="浏览..." Click="BrowseJava_Click"/>
+        </Grid>
+
+        <TextBlock Text="下载源" Style="{StaticResource SubtitleTextBlockStyle}"/>
+        <TextBlock Text="（可选）GitHub令牌（用于需多次请求的场景，如多次获取下载列表）"/>
+        <Grid ColumnSpacing="8">
+            <TextBox TextChanged="GitHubTokenChanged" x:Name="GitHubTokenBox" PlaceholderText="输入令牌..." IsReadOnly="False"/>
         </Grid>
     </StackPanel>
 </Page>

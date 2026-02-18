@@ -30,10 +30,10 @@ namespace GIML
         public SettingsPage()
         {
             this.InitializeComponent();
-            LoadSavedFolder();
+            LoadSavedSettings();
         }
 
-        private void LoadSavedFolder()
+        private void LoadSavedSettings()
         {
             // 读取保存的文件夹路径
             var localSettings = ApplicationData.Current.LocalSettings;
@@ -45,7 +45,10 @@ namespace GIML
             {
                 JavaPathBox.Text = javaPath.ToString();
             }
-
+            if (localSettings.Values.TryGetValue("GitHubToken", out object githubToken))
+            {
+                GitHubTokenBox.Text = githubToken.ToString();
+            }
         }
 
         private async void BrowseFolder_Click(object sender, RoutedEventArgs e)
@@ -136,6 +139,10 @@ namespace GIML
                 };
                 await errorDialog.ShowAsync();
             }
+        }
+        private void GitHubTokenChanged(object sender, TextChangedEventArgs e)
+        {
+            ApplicationData.Current.LocalSettings.Values["GitHubToken"] = (sender as TextBox).Text;
         }
     }
 }
