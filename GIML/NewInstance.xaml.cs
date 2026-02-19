@@ -74,10 +74,26 @@ namespace GIML
 
         private string ProcessInstanceName(string type, string version)
         {
-            string s = null;
-            s = type + "-" + version;
-            s = s.Replace(".", "-");
-            return s;
+            string baseName = $"{type}-{version}".Replace(".", "-");
+            string candidate = baseName;
+            int counter = 2;
+
+            var localSettings = ApplicationData.Current.LocalSettings;
+            if (localSettings.Values.TryGetValue("GameFolderPath", out object instancePathObj))
+            {
+                string folderPath = instancePathObj.ToString();
+                if (!string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
+                {
+                    // 循环直到找到一个不存在的文件名（带 .jar 扩展名）
+                    while (File.Exists(Path.Combine(folderPath, candidate + ".jar")))
+                    {
+                        candidate = $"{baseName}({counter})";
+                        counter++;
+                    }
+                }
+            }
+
+            return candidate; // 返回唯一的文件名（不含扩展名）
         }
 
         private void ReleaseSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -210,45 +226,110 @@ namespace GIML
             LoadReleasesAsync();
         }
 
-        //private async Task DownloadFileAsync(string url, IProgress<double> progress, CancellationToken cancellationToken)
-        //{
-        //    using var httpClient = new HttpClient();
-        //    using var response = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-        //    response.EnsureSuccessStatusCode();
+        private async Task DownloadFileAsync(string url, IProgress<double> progress, CancellationToken cancellationToken)
+        {
+            using var httpClient = new HttpClient();
+            using var response = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            response.EnsureSuccessStatusCode();
 
-        //    var totalBytes = response.Content.Headers.ContentLength ?? -1L;
-        //    await using var contentStream = await response.Content.ReadAsStreamAsync();
-        //    // 确定保存路径，例如：%LocalAppData%\GIML\Downloads\文件名
-        //    var fileName = InstancePathName.Text == "" ? InstancePathName.PlaceholderText : InstancePathName.Text;
-        //    var localSettings = ApplicationData.Current.LocalSettings;
-        //    string filePath = "";
-        //    if (localSettings.Values.TryGetValue("GameFolderPath", out object instancePath))
-        //    {
-        //        filePath = Path.Combine(instancePath.ToString(), fileName);
-        //    }
+            var totalBytes = response.Content.Headers.ContentLength ?? -1L;
+            await using var contentStream = await response.Content.ReadAsStreamAsync();
+            var fileName = (InstancePathName.Text == "" ? InstancePathName.PlaceholderText : InstancePathName.Text) + ".jar";
+            var localSettings = ApplicationData.Current.LocalSettings;
+            string filePath = "";
+            if (localSettings.Values.TryGetValue("GameFolderPath", out object instancePath))
+            {
+                filePath = Path.Combine(instancePath.ToString(), fileName);
+            }
 
-        //    await using var fileStream = File.Create(filePath);
-        //    var buffer = new byte[8192];
-        //    long totalRead = 0;
-        //    int bytesRead;
-        //    while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)) > 0)
-        //    {
-        //        await fileStream.WriteAsync(buffer, 0, bytesRead, cancellationToken);
-        //        totalRead += bytesRead;
-        //        if (totalBytes > 0)
-        //        {
-        //            double percentage = (double)totalRead / totalBytes * 100;
-        //            progress.Report(percentage);
-        //        }
-        //    }
-        //}
+            await using var fileStream = File.Create(filePath);
+            var buffer = new byte[8192];
+            long totalRead = 0;
+            int bytesRead;
+            while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)) > 0)
+            {
+                await fileStream.WriteAsync(buffer, 0, bytesRead, cancellationToken);
+                totalRead += bytesRead;
+                if (totalBytes > 0)
+                {
+                    double percentage = (double)totalRead / totalBytes * 100;
+                    progress.Report(percentage);
+                }
+            }
+        }
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedRelease != null)
+            if (SelectedRelease == null)
             {
-                DownloadingDialog.XamlRoot = this.XamlRoot;
-                ContentDialogResult result = await DownloadingDialog.ShowAsync();
+                return;
+            }
+
+            //var dialog = Resources["DownloadingDialog"] as ContentDialog;
+            //dialog.XamlRoot = this.XamlRoot;
+            //var progressBar = dialog.FindName("DownloadProgressBar") as ProgressBar;
+            //var statusText = dialog.FindName("DownloadStatusText") as TextBlock;
+
+            var progressBar = new ProgressBar { Width = 300, Height = 20, Minimum = 0, Maximum = 100 };
+            var statusText = new TextBlock { Text = "正在准备...", HorizontalAlignment = HorizontalAlignment.Center };
+            var stack = new StackPanel();
+            stack.Children.Add(progressBar);
+            stack.Children.Add(statusText);
+
+            var dialog = new ContentDialog
+            {
+                Title = "正在下载",
+                Content = stack,
+                CloseButtonText = "取消",
+                XamlRoot = this.XamlRoot,
+                MinWidth = 400
+            };
+
+            using var cts = new CancellationTokenSource();
+
+            dialog.CloseButtonClick += (s, args) =>
+            {
+                cts.Cancel();
+            };
+
+            var showTask = dialog.ShowAsync();
+
+            try
+            {
+                var progress = new Progress<double>(p =>
+                {
+                    progressBar.Value = p;
+                    statusText.Text = $"下载进度：{p:F1}%";
+                });
+
+                await DownloadFileAsync(SelectedRelease.DownloadUrl, progress, cts.Token);
+
+                if (App.MainWindow is MainWindow mainWindow)
+                {
+                    await mainWindow.ScanAndUpdateInstancesAsync();
+                }
+
+                if (dialog.IsLoaded)
+                {
+                    dialog.Hide();
+                }
+
+                CancelButton_Click(null, null);
+            }
+            catch (OperationCanceledException) { }
+            catch(Exception ex)
+            {
+                if(dialog.IsLoaded)
+                {
+                    dialog.Hide(); 
+                }
+                await new ContentDialog
+                {
+                    Title = "下载失败",
+                    Content = ex.Message,
+                    CloseButtonText = "确定",
+                    XamlRoot = this.XamlRoot
+                }.ShowAsync();
             }
         }
     }

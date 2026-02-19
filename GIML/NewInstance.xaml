@@ -11,19 +11,21 @@
 
     <Page.Resources>
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-
+        <!--
         <ContentDialog x:Name="DownloadingDialog"
             CloseButtonText="取消"
-            Title="正在下载">
+            Title="正在下载"
+            MinWidth="400">
             <StackPanel>
                 <TextBlock Text="正在下载您所选的游戏实例。坐和放宽..." />
                 <ProgressBar x:Name="DownloadProgressBar" 
                          IsIndeterminate="False" 
                          Minimum="0" Maximum="100" 
                          Width="300" Margin="12"/>
+                <TextBlock Text="" FontStyle="Italic" Foreground="Gray" x:Name="DownloadStatusText"/>
             </StackPanel>
         </ContentDialog>
-
+        -->
     </Page.Resources>
 
     <Grid>
@@ -65,7 +67,7 @@
                         <TextBlock Text="筛选：" VerticalAlignment="Center"/>
                         <ComboBox x:Name="ReleasesFliter" SelectionChanged="FliterBox_SelectionChanged" SelectedIndex="0" Width="342">
                             <ComboBoxItem Content="原版（Mindustry）" Tag="vanilla"/>
-                            <ComboBoxItem Content="前沿构建（Mindustry-BE）" Tag="be"/>
+                            <ComboBoxItem Content="前沿构建（Mindustry-bleeding-edge）" Tag="be"/>
                             <ComboBoxItem Content="学术端（Mindustry-CN-ARC）" Tag="arc"/>
                             <ComboBoxItem Content="X端（MindustryX）" Tag="x"/>
                         </ComboBox>

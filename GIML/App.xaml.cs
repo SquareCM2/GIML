@@ -26,6 +26,8 @@ namespace GIML
     /// </summary>
     public partial class App : Application
     {
+        public static List<GameInstance> GameInstances { get; set; } = new List<GameInstance>();
+
         private Window? _window;
 
         /// <summary>

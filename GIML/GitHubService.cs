@@ -158,7 +158,7 @@ namespace GIML
                         mindustryJar = release.Assets?.Find(a => a.Name.Contains("Mindustry-CN-ARC-Desktop-"));
                         break;
                     case "x":
-                        mindustryJar = release.Assets?.Find(a => a.Name.Contains("-Desktop.jar\r\n"));
+                        mindustryJar = release.Assets?.Find(a => a.Name.Contains("-Desktop.jar"));
                         break;
                 }
 

@@ -13,22 +13,27 @@
         <local:NullToBoolConverter x:Key="NullToBoolConverter"/>
         <!-- 实例卡片模板 -->
         <DataTemplate x:Key="InstanceTemplate" x:DataType="local:GameInstance">
-            <Grid Width="200" Height="200" Margin="10" Background="{ThemeResource CardBackgroundFillColorDefault}">
+            <Grid Width="155" Height="155" Margin="10" Background="{ThemeResource CardBackgroundFillColorDefault}" CornerRadius="8">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Image Source="{x:Bind IconPath}" Width="100" Height="100" Grid.Row="0"/>
+                <Image Source="{x:Bind IconPath}" Width="64" Height="110" Grid.Row="0"/>
                 <TextBlock Text="{x:Bind Name}" HorizontalAlignment="Center" Grid.Row="1"/>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                    <TextBlock Text="{x:Bind Type}" Foreground="Gray" FontSize="12" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Bind Version}" Foreground="Gray" FontSize="12" VerticalAlignment="Center"/>
+                </StackPanel>
             </Grid>
         </DataTemplate>
 
         <!-- 添加占位符模板 -->
         <DataTemplate x:Key="AddTemplate" x:DataType="local:AddInstancePlaceholder">
-            <Grid Width="200" Height="200" Margin="10" Background="{ThemeResource CardBackgroundFillColorSecondary}">
+            <Grid Width="155" Height="155" Margin="10" Background="{ThemeResource CardBackgroundFillColorSecondary}" CornerRadius="8">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <SymbolIcon Symbol="Add" Width="50" Height="50"/>
+                    <FontIcon Glyph="&#xE710;" Width="100" Height="100" FontSize="32"/>
                     <TextBlock Text="添加新实例" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Grid>
@@ -43,24 +48,26 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="64"/>
         </Grid.RowDefinitions>
         
-        <Grid Grid.Row="0">
-            <GridView ItemsSource="{x:Bind GameItems, Mode=OneWay}"
-          SelectionMode="Single"
-          SelectedItem="{x:Bind SelectedObject, Mode=TwoWay}"
-          SelectionChanged="GridView_SelectionChanged">
-                <GridView.ItemTemplateSelector>
-                    <local:GameItemTemplateSelector InstanceTemplate="{StaticResource InstanceTemplate}"
-                                        AddTemplate="{StaticResource AddTemplate}"/>
-                </GridView.ItemTemplateSelector>
-                <GridView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <ItemsWrapGrid MaximumRowsOrColumns="3" Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </GridView.ItemsPanel>
-            </GridView>
+        <Grid Grid.Row="0" HorizontalAlignment="Center" Width="720">
+            <ScrollView Padding="0, 10, 0 0">
+                <GridView ItemsSource="{x:Bind GameItems, Mode=OneWay}"
+                    SelectionMode="Single"
+                    SelectedItem="{x:Bind SelectedObject, Mode=TwoWay}"
+                    SelectionChanged="GridView_SelectionChanged" HorizontalAlignment="left">
+                    <GridView.ItemTemplateSelector>
+                        <local:GameItemTemplateSelector InstanceTemplate="{StaticResource InstanceTemplate}"
+                              AddTemplate="{StaticResource AddTemplate}"/>
+                    </GridView.ItemTemplateSelector>
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid MaximumRowsOrColumns="4" Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </GridView>
+            </ScrollView>
         </Grid>
 
         <Border Grid.Row="1" 
@@ -69,20 +76,25 @@
             Padding="0"/>
 
         <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="LaunchClient" 
-                Content="启动游戏" 
-                Width="100" Height="40"
-                HorizontalAlignment="Center" 
-                VerticalAlignment="Center"
-                Grid.Column="0"
-                IsEnabled="{x:Bind SelectedInstance, Mode=OneWay, Converter={StaticResource NullToBoolConverter}}"
-                Click="LaunchButton_Click"
-                Margin="5"
-                />
+            <StackPanel Orientation="Horizontal" Spacing="8" Padding="8, 0, 8, 0">
+                <Button x:Name="LaunchClient" 
+                    Content="启动游戏" 
+                    Width="100" Height="36"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    IsEnabled="{x:Bind SelectedInstance, Mode=OneWay, Converter={StaticResource NullToBoolConverter}}"
+                    Click="LaunchButton_Click"
+                    Margin="5"/>
+                <Button x:Name="EditInstance" 
+                    Content="编辑实例" 
+                    Width="100" Height="36"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    IsEnabled="{x:Bind SelectedInstance, Mode=OneWay, Converter={StaticResource NullToBoolConverter}}"
+                    Click="EditInstanceButton_Click"
+                    Margin="5"/>
+            </StackPanel>
+            
         </Grid>
     </Grid>
 </Page>

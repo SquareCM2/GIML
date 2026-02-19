@@ -29,8 +29,10 @@ namespace GIML
     // 游戏实例模型
     public class GameInstance
     {
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; }
         public string Version { get; set; }
+        public string Type { get; set; }
         public string JarPath { get; set; }
         public string IconPath { get; set; } // 图标路径，可以是本地路径或 ms-appx:///
     }
@@ -216,6 +218,58 @@ namespace GIML
             if (!GameItems.Any(item => item is AddInstancePlaceholder))
             {
                 GameItems.Add(new AddInstancePlaceholder());
+            }
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (App.GameInstances != null)
+            {
+                UpdateInstances(App.GameInstances);
+            }
+        }
+
+        private async void EditInstanceButton_Click(object sender, RoutedEventArgs e)
+        {
+            var instance = SelectedInstance;
+            if (instance == null) return;
+
+            // 弹出输入框（可使用 ContentDialog）
+            var dialog = new ContentDialog
+            {
+                Title = "编辑实例",
+                Content = new TextBox { Text = instance.Name, PlaceholderText = "请输入名称...", Header = "实例名称" },
+                PrimaryButtonText = "保存",
+                CloseButtonText = "取消",
+                XamlRoot = this.XamlRoot
+            };
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                var newName = (dialog.Content as TextBox)?.Text;
+                if (!string.IsNullOrWhiteSpace(newName))
+                {
+
+                    instance.Name = newName;
+                    // 更新 JSON
+                    await InstanceManager.AddOrUpdateAsync(instance);
+                    // 刷新列表（可选，因为实例对象本身是 ObservableCollection 的话会自动更新）
+                    // 如果使用 ObservableCollection，需确保 instance 被正确通知；否则可刷新 ItemsSource
+                    UpdateInstances(App.GameInstances);
+                }
+                else
+                {
+                    var errorDialog = new ContentDialog
+                    {
+                        Title = "错误",
+                        Content = "实例名称不能为空。",
+                        CloseButtonText = "确定",
+                        XamlRoot = this.XamlRoot
+                    };
+                    await errorDialog.ShowAsync();
+                    return; // 不执行保存
+                }
             }
         }
     }

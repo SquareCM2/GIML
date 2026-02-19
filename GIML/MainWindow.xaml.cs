@@ -128,15 +128,45 @@ namespace GIML
                 return; // 未设置文件夹
 
             string folderPath = folderPathObj.ToString();
+            if (!Directory.Exists(folderPath)) return;
 
-            // 执行扫描
-            var instances = await InstanceScanner.ScanForJarFilesAsync(folderPath, true);
+            var scannedInstances = await InstanceScanner.ScanForJarFilesAsync(folderPath, false);
+
+            var existingInstances = InstanceManager.Load(); // 返回 List<GameInstance>
+
+            var instancesByJar = existingInstances
+                .Where(i => !string.IsNullOrEmpty(i.JarPath))
+                .ToDictionary(i => i.JarPath, i => i);
+
+            var mergedInstances = new List<GameInstance>();
+
+            // 4. 遍历扫描到的实例
+            foreach (var scanned in scannedInstances)
+            {
+                if (instancesByJar.TryGetValue(scanned.JarPath, out GameInstance existing))
+                {
+                    // 已有实例：保留其所有属性（如用户修改过的 Name、IconPath 等）
+                    // 但可以更新版本号等从扫描得到的新信息（可选）
+                    existing.Version = scanned.Version; // 如果版本可能变化
+                    mergedInstances.Add(existing);
+                }
+                else
+                {
+                    // 新实例：直接添加扫描得到的实例（已包含 Name、Version、JarPath、IconPath 等）
+                    mergedInstances.Add(scanned);
+                }
+            }
+
+            // 更新静态数据
+            App.GameInstances = mergedInstances;
+
+            await InstanceManager.SaveAsync(mergedInstances);
 
             // 获取当前显示的 HomePage
             if (ContentFrame.Content is HomePage homePage)
             {
                 // 更新主页的实例集合
-                homePage.UpdateInstances(instances);
+                homePage.UpdateInstances(mergedInstances);
             }
         }
 
