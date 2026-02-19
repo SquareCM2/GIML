@@ -17,6 +17,7 @@
     <None Remove="DownloadPage.xaml" />
     <None Remove="HomePage.xaml" />
     <None Remove="NewInstance.xaml" />
+    <None Remove="RunningInstance.xaml" />
     <None Remove="SettingsPage.xaml" />
   </ItemGroup>
 
@@ -64,6 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\GameIcons\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="RunningInstance.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="NewInstance.xaml">

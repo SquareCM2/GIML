@@ -118,7 +118,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="90"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="145"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0" Padding="15, 0, 15, 15">
@@ -143,9 +143,16 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <TextBox Header="实例名称" x:Name="InstancePathName"/>
-                    <Button x:Name="InstanceDownloadButton" Grid.Row="1" VerticalAlignment="Bottom" Height="40" HorizontalAlignment="Center" Width="270" IsEnabled="False" Click="DownloadButton_Click">
+                    <TextBox Header="实例名称" x:Name="InstancePathName" TextChanged="InstancePathName_TextChanged"/>
+                    <TextBlock x:Name="ErrorTextBlock" 
+                       Text="名称包含非法字符"
+                       Foreground="Red"
+                       FontSize="11"
+                       Visibility="Collapsed"
+                       Margin="5,2,0,0" Grid.Row="1"/>
+                    <Button x:Name="InstanceDownloadButton" Grid.Row="2" VerticalAlignment="Bottom" Height="40" HorizontalAlignment="Center" Width="270" IsEnabled="False" Click="DownloadButton_Click">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <SymbolIcon Symbol="Download"/>
                             <TextBlock Text="下载" VerticalAlignment="Center"/>

@@ -120,8 +120,8 @@ namespace GIML
                         break;
                 }
                 InstanceVersion.Text = selected.TagName ?? "";
-                InstanceDownloadButton.IsEnabled = true;
                 InstancePathName.PlaceholderText = ProcessInstanceName(selected.Type, selected.TagName);
+                UpdateDownloadButtonBasedOnName();
             }
             else
             {
@@ -331,6 +331,45 @@ namespace GIML
                     XamlRoot = this.XamlRoot
                 }.ShowAsync();
             }
+        }
+
+        public static bool IsValidInstanceName(string input)
+        {
+            char[] invalidChars = Path.GetInvalidFileNameChars();
+            invalidChars = invalidChars.Concat(Path.GetInvalidPathChars()).ToArray();
+            return !(input.IndexOfAny(invalidChars) != -1);
+        }
+
+        private void UpdateDownloadButtonBasedOnName()
+        {
+            // 判断依据：如果文本框有输入，则用输入内容；否则用 PlaceholderText（默认名称）
+            string nameToCheck = string.IsNullOrEmpty(InstancePathName.Text)
+                                ? InstancePathName.PlaceholderText
+                                : InstancePathName.Text;
+            bool isValid = IsValidInstanceName(nameToCheck);
+
+            ErrorTextBlock.Visibility = isValid ? Visibility.Collapsed : Visibility.Visible;
+
+            // 控制边框颜色
+            if (isValid)
+            {
+                // 恢复默认边框颜色（从系统资源获取）
+                InstancePathName.BorderBrush = (Brush)Application.Current.Resources["TextControlBorderBrush"];
+            }
+            else
+            {
+                // 设置为红色
+                InstancePathName.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Red);
+            }
+
+            // 下载按钮必须同时满足：有选中的 release 且名称合法
+            InstanceDownloadButton.IsEnabled = (SelectedRelease != null) && isValid;
+        }
+
+        // 文本框内容变化时触发验证
+        private void InstancePathName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateDownloadButtonBasedOnName();
         }
     }
 }

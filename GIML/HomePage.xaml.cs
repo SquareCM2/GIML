@@ -185,17 +185,13 @@ namespace GIML
         {
             if (SelectedInstance != null)
             {
-                try
+                if (App.MainWindow is MainWindow mainWindow)
                 {
-                    // 创建 InstanceRunner 实例并运行
-                    var runner = new InstanceRunner();
-                    // 由于 RunInstance 可能阻塞，建议在后台线程运行
-                    Task.Run(() => runner.RunInstance(SelectedInstance.JarPath, SelectedInstance.Name));
-                }
-                catch (Exception ex)
-                {
-                    // 捕获并显示错误
-                    ShowMessage($"启动失败: {ex.Message}");
+                    // 禁用侧边栏菜单项
+                    mainWindow.SetNavMenuItemsEnabled(false);
+
+                    // 导航到 NewInstancePage
+                    Frame.Navigate(typeof(RunningInstance), SelectedInstance.JarPath);
                 }
             }
         }
