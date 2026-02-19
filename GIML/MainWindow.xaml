@@ -10,10 +10,14 @@
     Title="GIML Is Mindustry Launcher"
     Activated="MainWindow_Activated"
     >
+
     
+
+
     <Window.SystemBackdrop>
         <MicaBackdrop />
     </Window.SystemBackdrop>
+    
     <NavigationView x:Name="NavView" 
         PaneDisplayMode="LeftCompact"  
         IsSettingsVisible="True"

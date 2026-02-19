@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using GIML;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
@@ -13,12 +14,13 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics;
-using Windows.UI.ApplicationSettings;
 using Windows.Storage;  // 包含 ApplicationData
-using GIML;
+using Windows.UI.ApplicationSettings;
+using WinRT.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -34,6 +36,7 @@ namespace GIML
             resizeWindow();
             ContentFrame.Navigate(typeof(HomePage));
             NavView.BackRequested += OnNavViewBackRequested;
+            SetWindowIcon();
         }
 
         private void resizeWindow()
@@ -79,12 +82,22 @@ namespace GIML
             appWindow.TitleBar.PreferredTheme = TitleBarTheme.UseDefaultAppMode;
         }
 
+        private void SetWindowIcon()
+        {
+            var hWnd = WindowNative.GetWindowHandle(this);
+            var windowId = Win32Interop.GetWindowIdFromWindow(hWnd);
+            var appWindow = AppWindow.GetFromWindowId(windowId);
+
+            var iconId = IconService.GetApplicationIconId();
+            // 如果 iconId 为空，则使用默认图标，不会报错
+            appWindow.SetIcon(iconId);
+        }
+
         private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             if (args.IsSettingsInvoked)
             {
                 // 如果点击的是设置按钮，导航到设置页面
-                // 注意：你需要先创建一个名为 SettingsPage 的页面
                 ContentFrame.Navigate(typeof(SettingsPage));
             }
             else

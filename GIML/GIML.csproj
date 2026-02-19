@@ -12,7 +12,13 @@
     <WinUISDKReferences>false</WinUISDKReferences>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>Assets\GIML-64.ico</ApplicationIcon>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Remove="Assets\GIML-16.ico" />
+    <Content Remove="Assets\GIML-64.ico" />
+    <Content Remove="Assets\GIMLLogo.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Remove="DownloadPage.xaml" />
     <None Remove="HomePage.xaml" />
@@ -47,6 +53,7 @@
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Markdown" Version="7.1.2" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7705" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260209005" />
+    <PackageReference Include="WinUIEx" Version="2.9.0" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="DownloadPage.xaml">
