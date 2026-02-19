@@ -1,5 +1,7 @@
 ﻿# GIML Is Mindustry Launcher
 
+<img src="https://raw.githubusercontent.com/SquareCM2/GIML/1ed36ad6c4bbb1787741d74a221eaa9cf0c32e4e/GIML/Assets/GIMLLogo.png"/>
+
 简洁的Mindustry启动器，基于winUI 3编写。
 
 ## 构建
