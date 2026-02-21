@@ -18,12 +18,16 @@
     <Content Remove="Assets\GIML-16.ico" />
     <Content Remove="Assets\GIML-64.ico" />
     <Content Remove="Assets\GIMLLogo.png" />
+    <Content Remove="Assets\MindustryTextConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="DownloadPage.xaml" />
     <None Remove="HomePage.xaml" />
+    <None Remove="MapPage.xaml" />
+    <None Remove="ModPage.xaml" />
     <None Remove="NewInstance.xaml" />
     <None Remove="RunningInstance.xaml" />
+    <None Remove="SchematicPage.xaml" />
+    <None Remove="ServerPage.xaml" />
     <None Remove="SettingsPage.xaml" />
   </ItemGroup>
 
@@ -56,11 +60,6 @@
     <PackageReference Include="WinUIEx" Version="2.9.0" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="DownloadPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="SettingsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -72,6 +71,26 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\GameIcons\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="SchematicPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="ServerPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MapPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="ModPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="RunningInstance.xaml">

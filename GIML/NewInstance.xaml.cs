@@ -258,13 +258,39 @@ namespace GIML
             }
         }
 
+        private string GetTargetFilePath()
+        {
+            string fileName = (InstancePathName.Text == "" ? InstancePathName.PlaceholderText : InstancePathName.Text) + ".jar";
+            if (ApplicationData.Current.LocalSettings.Values.TryGetValue("GameFolderPath", out object instancePath))
+            {
+                return Path.Combine(instancePath.ToString(), fileName);
+            }
+            return null;
+        }
+
+        private void DeleteIncompleteFile(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    File.Delete(filePath);
+                    System.Diagnostics.Debug.WriteLine($"已删除不完整文件: {filePath}");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"删除文件失败: {ex}");
+                }
+            }
+        }
+
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedRelease == null)
             {
                 return;
             }
-
+            string targetFilePath = GetTargetFilePath();
             //var dialog = Resources["DownloadingDialog"] as ContentDialog;
             //dialog.XamlRoot = this.XamlRoot;
             //var progressBar = dialog.FindName("DownloadProgressBar") as ProgressBar;
@@ -316,10 +342,13 @@ namespace GIML
 
                 CancelButton_Click(null, null);
             }
-            catch (OperationCanceledException) { }
+            catch (OperationCanceledException) {
+                DeleteIncompleteFile(targetFilePath);
+            }
             catch(Exception ex)
             {
-                if(dialog.IsLoaded)
+                DeleteIncompleteFile(targetFilePath);
+                if (dialog.IsLoaded)
                 {
                     dialog.Hide(); 
                 }

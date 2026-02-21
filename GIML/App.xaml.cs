@@ -28,6 +28,8 @@ namespace GIML
     {
         public static List<GameInstance> GameInstances { get; set; } = new List<GameInstance>();
 
+        public static bool IsGameRunning { get; set; } = false;
+
         private Window? _window;
 
         /// <summary>

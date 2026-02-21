@@ -33,6 +33,7 @@ namespace GIML
         public RunningInstance()
         {
             InitializeComponent();
+            NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -84,6 +85,9 @@ namespace GIML
             _gameProcess.StartInfo.CreateNoWindow = true;  // 不显示控制台窗口
 
             _gameProcess.EnableRaisingEvents = true;
+
+            App.IsGameRunning = true;
+
             _gameProcess.Exited += (s, e) =>
             {
                 _isProcessExited = true;
@@ -91,6 +95,7 @@ namespace GIML
                 _ = DispatcherQueue.TryEnqueue(() =>
                 {
                     AppendOutput("游戏进程已退出。");
+                    App.IsGameRunning = false;
                     CloseButton_Click(null, null);
                 });
             };
@@ -160,24 +165,23 @@ namespace GIML
             if (App.MainWindow is MainWindow mainWindow)
             {
                 mainWindow.SetNavMenuItemsEnabled(true);
+                mainWindow.MainFrame.Navigate(typeof(HomePage));
+                mainWindow.MainFrame.BackStack.Clear();
             }
-
-            // 执行后退
-            Frame.GoBack();
         }
 
         // 在导航离开前，阻止用户意外离开（如果进程还在运行）
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
             // 如果进程仍在运行且不是通过我们的按钮主动返回，可以取消导航
-            if (!_isProcessExited && _gameProcess != null && !_gameProcess.HasExited)
-            {
-                // 可选：弹出确认对话框
-                // 这里简单取消导航，让用户先关闭游戏
-                e.Cancel = true;
-                // 可提示用户先关闭游戏
-                AppendOutput("游戏仍在运行，请先关闭游戏再返回。");
-            }
+            //if (!_isProcessExited && _gameProcess != null && !_gameProcess.HasExited)
+            //{
+            //    // 可选：弹出确认对话框
+            //    // 这里简单取消导航，让用户先关闭游戏
+            //    e.Cancel = true;
+            //    // 可提示用户先关闭游戏
+            //    AppendOutput("游戏仍在运行，请先关闭游戏再返回。");
+            //}
             base.OnNavigatingFrom(e);
         }
     }

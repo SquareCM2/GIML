@@ -187,9 +187,7 @@ namespace GIML
             {
                 if (App.MainWindow is MainWindow mainWindow)
                 {
-                    // 禁用侧边栏菜单项
-                    mainWindow.SetNavMenuItemsEnabled(false);
-
+                    mainWindow.SetSettingItemEnabled(false);
                     // 导航到 NewInstancePage
                     Frame.Navigate(typeof(RunningInstance), SelectedInstance.JarPath);
                 }

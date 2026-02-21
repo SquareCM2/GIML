@@ -24,12 +24,13 @@ using WinRT.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
-//感谢深度求索公司对本项目的大力支持。
 
 namespace GIML
 {
     public sealed partial class MainWindow : Window
     {
+        public Frame MainFrame => ContentFrame;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -110,10 +111,31 @@ namespace GIML
                     switch (pageTag)
                     {
                         case "HomePage":
-                            ContentFrame.Navigate(typeof(HomePage));
+                            if (App.IsGameRunning)
+                            {
+                                // 如果当前页面不是 RunningInstance，则导航过去
+                                if (!(ContentFrame.Content is RunningInstance))
+                                {
+                                    ContentFrame.Navigate(typeof(RunningInstance));
+                                }
+                                // 如果已经在 RunningInstance，什么都不做
+                            }
+                            else
+                            {
+                                ContentFrame.Navigate(typeof(HomePage));
+                            }
                             break;
-                        case "DownloadPage":
-                            ContentFrame.Navigate(typeof(DownloadPage));
+                        case "ModPage":
+                            ContentFrame.Navigate(typeof(ModPage));
+                            break;
+                        case "ServerPage":
+                            ContentFrame.Navigate(typeof(ServerPage));
+                            break;
+                        case "MapPage":
+                            ContentFrame.Navigate(typeof(MapPage));
+                            break;
+                        case "SchematicPage":
+                            ContentFrame.Navigate(typeof(SchematicPage));
                             break;
                             // 你可以在这里继续添加其他页面的判断
                     }
@@ -203,6 +225,14 @@ namespace GIML
                 }
             }
 
+            if (NavView.IsSettingsVisible && NavView.SettingsItem is NavigationViewItem settingsItem)
+            {
+                settingsItem.IsEnabled = isEnabled;
+            }
+        }
+
+        public void SetSettingItemEnabled(bool isEnabled)
+        {
             if (NavView.IsSettingsVisible && NavView.SettingsItem is NavigationViewItem settingsItem)
             {
                 settingsItem.IsEnabled = isEnabled;

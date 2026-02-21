@@ -11,6 +11,7 @@
 
     <Page.Resources>
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <local:InverseBoolConverter x:Key="InverseBoolConverter"/>
         <!--
         <ContentDialog x:Name="DownloadingDialog"
             CloseButtonText="取消"
@@ -56,6 +57,17 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="300"/>
             </Grid.ColumnDefinitions>
+
+            <Grid Background="#80000000" 
+                Visibility="{x:Bind IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Grid.Column="0">
+                <ProgressRing x:Name="LoadingRing" 
+                      IsActive="{x:Bind IsLoading, Mode=OneWay}" 
+                      Visibility="{x:Bind IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" 
+                      HorizontalAlignment="Center" 
+                      VerticalAlignment="Center"
+                      Width="50" Height="50"/>
+            </Grid>
+
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="28"/>
@@ -65,7 +77,7 @@
                 <Canvas Grid.Row="0">
                     <StackPanel Orientation="Horizontal" Spacing="8" Canvas.Left="20">
                         <TextBlock Text="筛选：" VerticalAlignment="Center"/>
-                        <ComboBox x:Name="ReleasesFliter" SelectionChanged="FliterBox_SelectionChanged" SelectedIndex="0" Width="342">
+                        <ComboBox x:Name="ReleasesFliter" SelectionChanged="FliterBox_SelectionChanged" SelectedIndex="0" Width="342" IsEnabled="{x:Bind IsLoading, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
                             <ComboBoxItem Content="原版（Mindustry）" Tag="vanilla"/>
                             <ComboBoxItem Content="前沿构建（Mindustry-bleeding-edge）" Tag="be"/>
                             <ComboBoxItem Content="学术端（Mindustry-CN-ARC）" Tag="arc"/>
@@ -76,22 +88,14 @@
 
 
 
-                <Grid Background="#80000000" 
-                    Visibility="{x:Bind IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Grid.Row="2">
-                    <ProgressRing x:Name="LoadingRing" 
-                      IsActive="{x:Bind IsLoading, Mode=OneWay}" 
-                      Visibility="{x:Bind IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" 
-                      HorizontalAlignment="Center" 
-                      VerticalAlignment="Center"
-                      Width="50" Height="50"/>
-                </Grid>
+                
 
                 <GridView Grid.Row="2"
                           x:Name="ReleasesGridView"
                           SelectionMode="Single"
                           SelectedItem="{x:Bind SelectedRelease, Mode=TwoWay}"
                           SelectionChanged="ReleaseSelectionChanged"
-                          Margin="20, 0">
+                          Margin="20, 0" IsEnabled="{x:Bind IsLoading, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}">
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="local:AvailableInstance">
                             <Border Background="{ThemeResource CardBackgroundFillColorDefault}"

@@ -29,7 +29,26 @@
         <NavigationView.MenuItems>
 
             <NavigationViewItem x:Name="HomeMenuItem" Icon="Play" Content="启动" Tag="HomePage" />
-            <NavigationViewItem x:Name="DownloadMenuItem" Icon="Download" Content="下载" Tag="DownloadPage" />
+            <NavigationViewItem x:Name="ModMenuItem" Content="模组" Tag="ModPage">
+                <NavigationViewItem.Icon>
+                    <FontIcon Glyph="&#xF012;"/>
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem x:Name="MapMenuItem" Content="地图" Tag="MapPage">
+                <NavigationViewItem.Icon>
+                    <FontIcon Glyph="&#xE826;"/>
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem x:Name="ServerMenuItem" Content="服务器" Tag="ServerPage">
+                <NavigationViewItem.Icon>
+                    <FontIcon Glyph="&#xE977;"/>
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem x:Name="SchematicMenuItem" Content="蓝图" Tag="SchematicPage">
+                <NavigationViewItem.Icon>
+                    <FontIcon Glyph="&#xE81E;"/>
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
         </NavigationView.MenuItems>
 
         <!-- 内容显示区域：Frame 是一个容器，用来动态切换不同的页面 [citation:6] -->
