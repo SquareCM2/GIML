@@ -71,7 +71,7 @@
                             </StackPanel>
                             <StackPanel Grid.Column="2" Spacing="20">
                                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                                    <TextBlock Text="可用端：" Foreground="Gray" FontSize="12"/>
+                                    <TextBlock Text="服务端：" Foreground="Gray" FontSize="12"/>
                                     <TextBlock Text="{x:Bind Type}" Foreground="Gray" FontSize="12"/>
                                 </StackPanel>
                                 <Button Width="150" Height="40" Click="CopyAddressButton_Click" Tag="{x:Bind}">
