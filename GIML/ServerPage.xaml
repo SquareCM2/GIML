@@ -46,7 +46,13 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
                                 <RichTextBlock local:RichTextHelper.FormattedText="{x:Bind Name, Mode=OneWay}" FontSize="16"/>
-                                <TextBlock Text="{x:Bind Address}" Foreground="Gray"/>
+                                <StackPanel Orientation="Horizontal" Spacing="20">
+                                    <StackPanel Orientation="Horizontal" Spacing="4">
+                                        <TextBlock Text="版本" Foreground="Gray"/>
+                                        <TextBlock Text="{x:Bind Version}" Foreground="Gray"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{x:Bind Address}" Foreground="Gray"/>
+                                </StackPanel>
                                 <RichTextBlock local:RichTextHelper.FormattedText="{x:Bind Desc, Mode=OneWay}" FontSize="12"/>
                             </StackPanel>
                             <StackPanel Grid.Column="1">
