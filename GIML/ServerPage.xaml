@@ -45,7 +45,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
-                                <RichTextBlock local:RichTextHelper.FormattedText="{x:Bind Name, Mode=OneWay}" FontSize="16"/>
+                                <RichTextBlock local:RichTextHelper.FormattedText="{x:Bind Name, Mode=OneWay}" FontSize="16" FontFamily="Segoe UI, ms-appx:///Assets/Fonts/font.woff#fontello"/>
                                 <StackPanel Orientation="Horizontal" Spacing="20">
                                     <StackPanel Orientation="Horizontal" Spacing="4">
                                         <TextBlock Text="版本" Foreground="Gray"/>
@@ -53,7 +53,7 @@
                                     </StackPanel>
                                     <TextBlock Text="{x:Bind Address}" Foreground="Gray"/>
                                 </StackPanel>
-                                <RichTextBlock local:RichTextHelper.FormattedText="{x:Bind Desc, Mode=OneWay}" FontSize="12"/>
+                                <RichTextBlock local:RichTextHelper.FormattedText="{x:Bind Desc, Mode=OneWay}" FontSize="12" FontFamily="Segoe UI, ms-appx:///Assets/Fonts/font.woff#fontello"/>
                             </StackPanel>
                             <StackPanel Grid.Column="1">
                                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
@@ -61,7 +61,7 @@
                                     <TextBlock Text="/" Foreground="Gray"/>
                                     <TextBlock Text="{x:Bind Limit_Str}" Foreground="Gray"/>
                                 </StackPanel>
-                                <RichTextBlock local:RichTextHelper.FormattedText="{x:Bind MapName, Mode=OneWay}" FontSize="14"/>
+                                <RichTextBlock local:RichTextHelper.FormattedText="{x:Bind MapName, Mode=OneWay}" FontSize="14" FontFamily="Segoe UI, ms-appx:///Assets/Fonts/font.woff#fontello"/>
                                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                                     <TextBlock Text="模式：" Foreground="Gray" FontSize="12"/>
                                     <TextBlock Text="{x:Bind Mode}" Foreground="Gray" FontSize="12"/>

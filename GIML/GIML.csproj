@@ -15,9 +15,11 @@
     <ApplicationIcon>Assets\GIML-64.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="Assets\Fonts\font.woff" />
     <Content Remove="Assets\GIML-16.ico" />
     <Content Remove="Assets\GIML-64.ico" />
     <Content Remove="Assets\GIMLLogo.png" />
+    <Content Remove="Assets\icon.ttf" />
     <Content Remove="Assets\MindustryTextConverter.cs" />
   </ItemGroup>
   <ItemGroup>
