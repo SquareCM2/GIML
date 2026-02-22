@@ -11,6 +11,8 @@
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
+            <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <local:BoolToTextConverter x:Key="BoolToTextConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -110,7 +110,7 @@ namespace GIML
                 request.Headers.Add("Authorization", "token " + githubToken.ToString());
             }
 
-            var response = await _httpClient.GetAsync(url);
+            var response = await _httpClient.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
             {

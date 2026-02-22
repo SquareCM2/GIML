@@ -23,7 +23,30 @@
     <Content Remove="Assets\MindustryTextConverter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Assets\Items\item-beryllium.png" />
+    <None Remove="Assets\Items\item-blast-compound.png" />
+    <None Remove="Assets\Items\item-carbide.png" />
+    <None Remove="Assets\Items\item-coal.png" />
+    <None Remove="Assets\Items\item-copper.png" />
+    <None Remove="Assets\Items\item-dormant-cyst.png" />
+    <None Remove="Assets\Items\item-fissile-matter.png" />
+    <None Remove="Assets\Items\item-graphite.png" />
+    <None Remove="Assets\Items\item-lead.png" />
+    <None Remove="Assets\Items\item-metaglass.png" />
+    <None Remove="Assets\Items\item-oxide.png" />
+    <None Remove="Assets\Items\item-phase-fabric.png" />
+    <None Remove="Assets\Items\item-plastanium.png" />
+    <None Remove="Assets\Items\item-pyratite.png" />
+    <None Remove="Assets\Items\item-sand.png" />
+    <None Remove="Assets\Items\item-scrap.png" />
+    <None Remove="Assets\Items\item-silicon.png" />
+    <None Remove="Assets\Items\item-spore-pod.png" />
+    <None Remove="Assets\Items\item-surge-alloy.png" />
+    <None Remove="Assets\Items\item-thorium.png" />
+    <None Remove="Assets\Items\item-titanium.png" />
+    <None Remove="Assets\Items\item-tungsten.png" />
     <None Remove="HomePage.xaml" />
+    <None Remove="MapInfoPage.xaml" />
     <None Remove="MapPage.xaml" />
     <None Remove="ModPage.xaml" />
     <None Remove="NewInstance.xaml" />
@@ -57,8 +80,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.Markdown" Version="7.1.2" />
+    <PackageReference Include="Hjson" Version="3.0.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7705" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260209005" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="WinUIEx" Version="2.9.0" />
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +98,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\GameIcons\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MapInfoPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="SchematicPage.xaml">

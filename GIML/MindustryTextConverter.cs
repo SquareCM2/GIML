@@ -29,6 +29,7 @@ namespace GIML
             ["gray"] = "#808080",
             ["lightgray"] = "#D3D3D3",
             ["darkgray"] = "#A9A9A9",
+            ["olive"] = "#808000",
         };
 
         public static Paragraph ToRichTextParagraph(string input)

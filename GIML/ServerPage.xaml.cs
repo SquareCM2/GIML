@@ -15,6 +15,8 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Microsoft.Windows.AppNotifications;
+using Microsoft.Windows.AppNotifications.Builder;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -103,6 +105,14 @@ namespace GIML
             // 可选：给用户一个短暂的反馈（例如按钮文字闪烁或 ToolTip）
             // 这里简单显示一个提示（可能需要更复杂实现，但基础功能已完成）
             System.Diagnostics.Debug.WriteLine($"已复制地址: {server.Address}");
+
+            var builder = new AppNotificationBuilder()
+                .AddText("已复制地址")
+                .AddText(server.Address)  // 可显示具体命令
+                .SetAppLogoOverride(new Uri("ms-appx:///Assets/GIMLIcon.png")); // 可选：应用图标
+
+            var notification = builder.BuildNotification();
+            AppNotificationManager.Default.Show(notification);
         }
     }
 }
