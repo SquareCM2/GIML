@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="GIML.AboutPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GIML"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="20">
+        <StackPanel Spacing="10">
+            <TextBlock Text="关于启动器" Style="{StaticResource TitleTextBlockStyle}"/>
+            <Image Source="/Assets/GIMLLogo.png"/>
+            <RichTextBlock>
+                <Paragraph>
+                    <Run>作者：SquareCM2</Run>
+                    <Hyperlink NavigateUri="https://github.com/SquareCM2/GIML/">仓库主页</Hyperlink>
+                    <Hyperlink NavigateUri="https://github.com/SquareCM2/">Github</Hyperlink>
+                    <Hyperlink NavigateUri="https://space.bilibili.com/442509696">Bilibili</Hyperlink>
+                </Paragraph>
+                <Paragraph>
+                    <Run>感谢wayzer的</Run>
+                    <Hyperlink NavigateUri="https://www.mindustry.top/">Mindustry资源站</Hyperlink>
+                    <Run>为地图与服务器列表的获取提供支持。</Run>
+                </Paragraph>
+                <Paragraph>
+                    <Run>感谢</Run>
+                    <Hyperlink NavigateUri="https://github.com/Anuken">Anuken</Hyperlink>
+                    <Run>提供了字体与物品贴图。</Run>
+                </Paragraph>
+            </RichTextBlock>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -18,11 +18,12 @@
     <Content Remove="Assets\Fonts\font.woff" />
     <Content Remove="Assets\GIML-16.ico" />
     <Content Remove="Assets\GIML-64.ico" />
-    <Content Remove="Assets\GIMLLogo.png" />
     <Content Remove="Assets\icon.ttf" />
     <Content Remove="Assets\MindustryTextConverter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="AboutPage.xaml" />
+    <None Remove="Assets\GIMLLogo.png" />
     <None Remove="Assets\Items\item-beryllium.png" />
     <None Remove="Assets\Items\item-blast-compound.png" />
     <None Remove="Assets\Items\item-carbide.png" />
@@ -98,6 +99,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\GameIcons\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="AboutPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="MapInfoPage.xaml">

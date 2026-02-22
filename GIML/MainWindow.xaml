@@ -49,7 +49,16 @@
                     <FontIcon Glyph="&#xE81E;"/>
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
+
+            
         </NavigationView.MenuItems>
+        <NavigationView.FooterMenuItems>
+            <NavigationViewItem x:Name="AboutItem" Content="关于" Tag="AboutPage">
+                <NavigationViewItem.Icon>
+                    <FontIcon Glyph="&#xE946;" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+        </NavigationView.FooterMenuItems>
 
         <!-- 内容显示区域：Frame 是一个容器，用来动态切换不同的页面 [citation:6] -->
         <Frame x:Name="ContentFrame"/>

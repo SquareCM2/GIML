@@ -137,6 +137,9 @@ namespace GIML
                         case "SchematicPage":
                             ContentFrame.Navigate(typeof(SchematicPage));
                             break;
+                        case "AboutPage":
+                            ContentFrame.Navigate(typeof(AboutPage));
+                            break;
                             // 你可以在这里继续添加其他页面的判断
                     }
                 }
