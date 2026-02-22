@@ -27,28 +27,20 @@ namespace GIML
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
+        private AppSettings _currentSettings;
+
         public SettingsPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+            _currentSettings = SettingsManager.Load();
             LoadSavedSettings();
         }
 
         private void LoadSavedSettings()
         {
-            // 读取保存的文件夹路径
-            var localSettings = ApplicationData.Current.LocalSettings;
-            if (localSettings.Values.TryGetValue("GameFolderPath", out object path))
-            {
-                FolderPathBox.Text = path.ToString();
-            }
-            if (localSettings.Values.TryGetValue("JavaPath", out object javaPath))
-            {
-                JavaPathBox.Text = javaPath.ToString();
-            }
-            if (localSettings.Values.TryGetValue("GitHubToken", out object githubToken))
-            {
-                GitHubTokenBox.Text = githubToken.ToString();
-            }
+            FolderPathBox.Text = _currentSettings.GameFolderPath ?? "";
+            JavaPathBox.Text = _currentSettings.JavaPath ?? "";
+            GitHubTokenBox.Text = _currentSettings.GitHubToken ?? "";
         }
 
         private async void BrowseFolder_Click(object sender, RoutedEventArgs e)
@@ -70,11 +62,10 @@ namespace GIML
                 {
                     string folderPath = folder.Path;
                     FolderPathBox.Text = folderPath;
-
-                    // 保存到设置
-                    ApplicationData.Current.LocalSettings.Values["GameFolderPath"] = folderPath;
+                    _currentSettings.GameFolderPath = folderPath;
+                    SettingsManager.Save(_currentSettings);
                 }
-
+                // 可选：触发扫描
                 if (App.MainWindow is MainWindow mainWindow)
                 {
                     await mainWindow.ScanAndUpdateInstancesAsync();
@@ -115,11 +106,10 @@ namespace GIML
                 {
                     string filePath = file.Path;
                     JavaPathBox.Text = filePath;
-
-                    // 保存到设置
-                    ApplicationData.Current.LocalSettings.Values["JavaPath"] = filePath;
+                    _currentSettings.JavaPath = filePath;
+                    SettingsManager.Save(_currentSettings);
                 }
-
+                // 可选：触发扫描
                 if (App.MainWindow is MainWindow mainWindow)
                 {
                     await mainWindow.ScanAndUpdateInstancesAsync();
@@ -140,9 +130,24 @@ namespace GIML
                 await errorDialog.ShowAsync();
             }
         }
+
+
+        private bool _isUpdating = false;
+
         private void GitHubTokenChanged(object sender, TextChangedEventArgs e)
         {
-            ApplicationData.Current.LocalSettings.Values["GitHubToken"] = (sender as TextBox).Text;
+            if (_isUpdating) return;
+            _isUpdating = true;
+            try
+            {
+                var textBox = sender as TextBox;
+                _currentSettings.GitHubToken = textBox.Text;
+                SettingsManager.Save(_currentSettings);
+            }
+            finally
+            {
+                _isUpdating = false;
+            }
         }
     }
 }

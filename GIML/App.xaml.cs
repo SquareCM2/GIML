@@ -51,6 +51,15 @@ namespace GIML
         {
             MainWindow = new MainWindow();
             MainWindow.Activate();
+
+            this.UnhandledException += (sender, e) =>
+            {
+                e.Handled = true; // 暂时标记为已处理，避免立即退出
+                string logPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GIML", "crash.log");
+                System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(logPath));
+                System.IO.File.AppendAllText(logPath, $"{DateTime.Now}: {e.Exception}{Environment.NewLine}");
+                System.Diagnostics.Debug.WriteLine($"未处理异常: {e.Exception}");
+            };
         }
 
         

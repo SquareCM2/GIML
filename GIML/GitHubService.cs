@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Microsoft.WindowsAppSDK;
 using Windows.ApplicationModel.Background;
 using System.IO;
 using System.Linq;
@@ -103,11 +102,9 @@ namespace GIML
             // 可选：指定API版本
             request.Headers.Add("Accept", "application/vnd.github.v3+json");
 
-            var localSettings = ApplicationData.Current.LocalSettings;
-
-            if (localSettings.Values.TryGetValue("GitHubToken", out object githubToken))
+            if (!string.IsNullOrEmpty(SettingsManager.Load().GitHubToken))
             {
-                request.Headers.Add("Authorization", "token " + githubToken.ToString());
+                request.Headers.Add("Authorization", "token " + SettingsManager.Load().GitHubToken);
             }
 
             var response = await _httpClient.SendAsync(request);

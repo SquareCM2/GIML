@@ -161,11 +161,11 @@ namespace GIML
         public async Task ScanAndUpdateInstancesAsync()
         {
             // 读取设置
-            var localSettings = ApplicationData.Current.LocalSettings;
-            if (!localSettings.Values.TryGetValue("GameFolderPath", out object folderPathObj))
-                return; // 未设置文件夹
+            var settings = SettingsManager.Load();
+            string folderPath = settings.GameFolderPath;
+            if (string.IsNullOrEmpty(folderPath) || !Directory.Exists(folderPath))
+                return;
 
-            string folderPath = folderPathObj.ToString();
             if (!Directory.Exists(folderPath)) return;
 
             var scannedInstances = await InstanceScanner.ScanForJarFilesAsync(folderPath, false);

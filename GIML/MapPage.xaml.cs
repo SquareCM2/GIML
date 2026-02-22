@@ -225,14 +225,6 @@ namespace GIML
             // 可选：给用户一个短暂的反馈（如弹出提示）
             // 这里简单输出调试信息
             System.Diagnostics.Debug.WriteLine($"已复制命令: {command}");
-
-            var builder = new AppNotificationBuilder()
-                .AddText("已复制换图指令")
-                .AddText(command)  // 可显示具体命令
-                .SetAppLogoOverride(new Uri("ms-appx:///Assets/GIMLIcon.png")); // 可选：应用图标
-
-            var notification = builder.BuildNotification();
-            AppNotificationManager.Default.Show(notification);
         }
 
         private async void MapDownloadButton_Click(object sender, RoutedEventArgs e)
@@ -335,24 +327,11 @@ namespace GIML
                         await response.Content.CopyToAsync(fs);
                     }
                 }
-
-                var builder = new AppNotificationBuilder()
-                .AddText("已下载地图")
-                .AddText(filePath)  // 可显示具体命令
-                .SetAppLogoOverride(new Uri("ms-appx:///Assets/GIMLIcon.png")); // 可选：应用图标
-
-                var notification = builder.BuildNotification();
-                AppNotificationManager.Default.Show(notification);
+                ShowMessage($"成功下载到地址：{filePath}");
             }
             catch (Exception ex)
             {
-                var builder = new AppNotificationBuilder()
-                .AddText("下载失败")
-                .AddText(ex.Message)  // 可显示具体命令
-                .SetAppLogoOverride(new Uri("ms-appx:///Assets/GIMLIcon.png")); // 可选：应用图标
-
-                var notification = builder.BuildNotification();
-                AppNotificationManager.Default.Show(notification);
+                ShowMessage($"下载失败：{ex.Message}");
             }
         }
 

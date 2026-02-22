@@ -17,7 +17,6 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using Microsoft.WindowsAppSDK.Runtime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using System.Net.Http;
@@ -78,10 +77,9 @@ namespace GIML
             string candidate = baseName;
             int counter = 2;
 
-            var localSettings = ApplicationData.Current.LocalSettings;
-            if (localSettings.Values.TryGetValue("GameFolderPath", out object instancePathObj))
+            if (!string.IsNullOrEmpty(SettingsManager.Load().GameFolderPath))
             {
-                string folderPath = instancePathObj.ToString();
+                string folderPath = SettingsManager.Load().GameFolderPath;
                 if (!string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
                 {
                     // 循环直到找到一个不存在的文件名（带 .jar 扩展名）
@@ -235,11 +233,10 @@ namespace GIML
             var totalBytes = response.Content.Headers.ContentLength ?? -1L;
             await using var contentStream = await response.Content.ReadAsStreamAsync();
             var fileName = (InstancePathName.Text == "" ? InstancePathName.PlaceholderText : InstancePathName.Text) + ".jar";
-            var localSettings = ApplicationData.Current.LocalSettings;
             string filePath = "";
-            if (localSettings.Values.TryGetValue("GameFolderPath", out object instancePath))
+            if (!string.IsNullOrEmpty(SettingsManager.Load().GameFolderPath))
             {
-                filePath = Path.Combine(instancePath.ToString(), fileName);
+                filePath = Path.Combine(SettingsManager.Load().GameFolderPath, fileName);
             }
 
             await using var fileStream = File.Create(filePath);
@@ -261,9 +258,9 @@ namespace GIML
         private string GetTargetFilePath()
         {
             string fileName = (InstancePathName.Text == "" ? InstancePathName.PlaceholderText : InstancePathName.Text) + ".jar";
-            if (ApplicationData.Current.LocalSettings.Values.TryGetValue("GameFolderPath", out object instancePath))
+            if (!string.IsNullOrEmpty(SettingsManager.Load().GameFolderPath))
             {
-                return Path.Combine(instancePath.ToString(), fileName);
+                return Path.Combine(SettingsManager.Load().GameFolderPath, fileName);
             }
             return null;
         }

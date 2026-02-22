@@ -47,22 +47,20 @@ namespace GIML
 
         private async void StartGameProcess(string jarPath)
         {
-            var localSettings = ApplicationData.Current.LocalSettings;
             string JavaPath = null;
             string FolderPath = null;
-            if (localSettings.Values.TryGetValue("JavaPath", out object javaPath))
+            if (!string.IsNullOrEmpty(SettingsManager.Load().JavaPath))
             {
-                JavaPath = javaPath.ToString();
+                JavaPath = SettingsManager.Load().JavaPath;
             }
             else
             {
                 return;
             }
 
-            if (localSettings.Values.TryGetValue("GameFolderPath", out object path))
+            if (!string.IsNullOrEmpty(SettingsManager.Load().GameFolderPath))
             {
-                FolderPath = path.ToString();
-                //FolderPath = FolderPath.Substring(1, FolderPath.Length - 2);
+                FolderPath = SettingsManager.Load().GameFolderPath;
             }
             else
             {

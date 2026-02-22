@@ -11,8 +11,7 @@ namespace GIML
     public static class InstanceManager
     {
         private static readonly string FileName = "instancesData.json";
-        private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-        private static string FilePath => Path.Combine((localSettings.Values.TryGetValue("GameFolderPath", out object path) ? path.ToString() : ""), FileName);
+        private static string FilePath => Path.Combine((!string.IsNullOrEmpty(SettingsManager.Load().GameFolderPath) ? SettingsManager.Load().GameFolderPath : ""), FileName);
 
         // 加载所有实例（同步，适合启动时调用）
         public static List<GameInstance> Load()
